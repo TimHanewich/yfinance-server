@@ -2,6 +2,11 @@
 port:int = 8080
 ####################
 
+# Opening Message
+print("yfinance-server")
+print("github.com/TimHanewich/yfinance-server")
+print()
+
 # import yfinance
 print("Importing yfinance... ", end="")
 import yfinance as yf
