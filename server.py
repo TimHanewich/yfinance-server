@@ -31,12 +31,27 @@ def quote(symbol:str):
         print("Pulling data using yfinance... ", end="")
         ticker = yf.Ticker(symbol.upper())
         data = ticker.history(period="2d")
+            
+        # Do we have legit data?
+        # yfinance will return just an empty data array if it didnt work (i.e. bogus symbol)
+        if data.empty:
+            r = Response()
+            r.status = 500
+            r.headers["Content-Type"] = "text/plain"
+            r.set_data("Data pull from yfinance did not result in any data. Are you sure you provided a valid ticker?")
+            return r
+
+        # Extract current price
+        print("Extracting current price... ", end="")
+        current_price:float = data["Close"].iloc[-1]
         print("done")
 
-        # Extract data
-        print("Extracting data... ", end="")
-        prev_close:float = data["Close"].iloc[-2]
-        current_price:float = data["Close"].iloc[-1]
+        # Extract previous close
+        print("Extracting previous close... ", end="")
+        if len(data) < 2: # if our request for 2 days of data only returned 1 day of data, that means it is an IPO (rare). So there isn't a "previous close" to compare to. So in that case, just do the changes against the opening price.
+            prev_close = data["Open"].iloc[-1]
+        else: # there was data for a day before yesterday... not an IPO. most common obviously.
+            prev_close:float = data["Close"].iloc[-2]
         print("done")
 
         # Calculate
