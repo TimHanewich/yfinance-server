@@ -37,7 +37,7 @@ def quote(symbol:str):
         print("Request for quote data for '" + symbol.upper() + "'")
 
         # pull down data with yfinance
-        printnr("Pulling data using yfinance... ", end="")
+        printnr("Pulling data using yfinance... ")
         ticker = yf.Ticker(symbol.upper())
         data = ticker.history(period="2d")
             
@@ -51,12 +51,12 @@ def quote(symbol:str):
             return r
 
         # Extract current price
-        printnr("Extracting current price... ", end="")
+        printnr("Extracting current price... ")
         current_price:float = data["Close"].iloc[-1]
         print("done")
 
         # Extract previous close
-        printnr("Extracting previous close... ", end="")
+        printnr("Extracting previous close... ")
         if len(data) < 2: # if our request for 2 days of data only returned 1 day of data, that means it is an IPO (rare). So there isn't a "previous close" to compare to. So in that case, just do the changes against the opening price.
             prev_close = data["Open"].iloc[-1]
         else: # there was data for a day before yesterday... not an IPO. most common obviously.
