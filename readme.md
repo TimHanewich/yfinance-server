@@ -3,7 +3,7 @@ A lightweight Flask server (Python) for serving stock quote data via [yfinance](
 
 To Run:
 ```
-python server.py
+python yfinance-server.py
 ```
 
 ## Dependencies:
