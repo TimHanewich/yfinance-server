@@ -71,6 +71,7 @@ def quote(symbol:str):
         return r
 
 # SERVE
+print()
 print("----- NOW SERVING -----")
 print("Example calls: ")
 print("GET http://localhost:" + str(port) + "/alive")
