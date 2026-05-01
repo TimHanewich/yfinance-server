@@ -53,7 +53,8 @@ def quote(symbol:str):
             print("Extracting '" + symb.upper() + "'")
             ThisSymbData = data[symb.upper()]
             if ThisSymbData.isna().all().all(): # if it is all NaN data (not valid symbol probably)
-                pass
+                print("No data available.")
+                ToReturn[symb.upper()] = "No data available."
             else:
 
                 # Extract current price
@@ -79,7 +80,19 @@ def quote(symbol:str):
                 # Percent change is sent already pre-multiplied by 100
                 ToReturn[symb.upper()] = {"price": round(current_price, 2), "change": round(dollar_change, 2), "changePercent": round(percent_change*100, 1)}
 
-        
+        # If there is only one item in the ToReturn, just go with that.
+        # i.e. if they only requested one symbol, return that as the object, not an object with the symbol as the key and the object as the value.
+        if len(ToReturn) == 1:
+            inner_value = next(iter(ToReturn.values())) # grab the value of the one property in the dict
+            if isinstance(inner_value, dict): # if it is an object, that means it was successful (contains legit data), so return that
+                ToReturn = inner_value
+            else: # if it isn't a dict, it is prob a string with the error msg... return that DIFFERENLY
+                r = Response()
+                r.status = 404 # not found
+                r.headers["Content-Type"] = "text/plain"
+                r.set_data("Data pull from yfinance did not result in any data. Are you sure you provided a valid ticker?")
+                return r
+
         # return
         print("Returning...")
         r = Response()
