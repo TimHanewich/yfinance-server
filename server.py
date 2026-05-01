@@ -12,12 +12,12 @@ print()
 def printnr(msg:str): print(msg, end="", flush=True)
 
 # import yfinance
-printnr("Importing yfinance... ", end="")
+printnr("Importing yfinance... ")
 import yfinance as yf
 print("done")
 
 # import flask
-printnr("Importing Flask... ", end="")
+printnr("Importing Flask... ")
 from flask import Flask, request, Response
 import json
 print("done")
