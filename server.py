@@ -28,10 +28,16 @@ def quote(symbol:str):
         print("Request for quote data for '" + symbol.upper() + "'")
 
         # pull down data with yfinance
+        print("Pulling data using yfinance... ", end="")
         ticker = yf.Ticker(symbol.upper())
         data = ticker.history(period="2d")
+        print("done")
+
+        # Extract data
+        print("Extracting data... ", end="")
         prev_close:float = data["Close"].iloc[-2]
         current_price:float = data["Close"].iloc[-1]
+        print("done")
 
         # Calculate
         dollar_change:float = current_price - prev_close
@@ -42,11 +48,17 @@ def quote(symbol:str):
         ToReturn:dict = {"price": round(current_price, 2), "change": round(dollar_change, 2), "changePecent": round(percent_change*100, 1)}
 
         # return
+        print("Returning...")
         r = Response()
         r.status = 200
         r.headers["Content-Type"] = "application/json"
         r.set_data(json.dumps(ToReturn))
         return r
 
-    
+# SERVE
+print("----- NOW SERVING -----")
+print("Example calls: ")
+print("GET http://localhost:" + str(port) + "/alive")
+print("GET http://localhost:" + str(port) + "/quote/msft")
+print("-----------------------")
 server.run(host="0.0.0.0", port=port)
