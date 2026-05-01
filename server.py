@@ -1,3 +1,5 @@
+# LATEST VERSION OF THIS FILE CAN BE FOUND HERE: https://raw.githubusercontent.com/TimHanewich/yfinance-server/refs/heads/master/server.py
+
 ##### SETTINGS #####
 port:int = 8080
 ####################
