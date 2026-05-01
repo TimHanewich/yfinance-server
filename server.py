@@ -36,7 +36,7 @@ def quote(symbol:str):
         # yfinance will return just an empty data array if it didnt work (i.e. bogus symbol)
         if data.empty:
             r = Response()
-            r.status = 500
+            r.status = 404
             r.headers["Content-Type"] = "text/plain"
             r.set_data("Data pull from yfinance did not result in any data. Are you sure you provided a valid ticker?")
             return r
@@ -60,7 +60,7 @@ def quote(symbol:str):
 
         # Construct
         # Percent change is sent already pre-multiplied by 100
-        ToReturn:dict = {"price": round(current_price, 2), "change": round(dollar_change, 2), "changePecent": round(percent_change*100, 1)}
+        ToReturn:dict = {"price": round(current_price, 2), "change": round(dollar_change, 2), "changePercent": round(percent_change*100, 1)}
 
         # return
         print("Returning...")
