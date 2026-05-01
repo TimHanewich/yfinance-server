@@ -7,13 +7,17 @@ print("yfinance-server")
 print("github.com/TimHanewich/yfinance-server")
 print()
 
+# helper function to print but not go to new line
+# "printnr" = "print no return"
+def printnr(msg:str): print(msg, end="", flush=True)
+
 # import yfinance
-print("Importing yfinance... ", end="")
+printnr("Importing yfinance... ", end="")
 import yfinance as yf
 print("done")
 
 # import flask
-print("Importing Flask... ", end="")
+printnr("Importing Flask... ", end="")
 from flask import Flask, request, Response
 import json
 print("done")
@@ -33,7 +37,7 @@ def quote(symbol:str):
         print("Request for quote data for '" + symbol.upper() + "'")
 
         # pull down data with yfinance
-        print("Pulling data using yfinance... ", end="")
+        printnr("Pulling data using yfinance... ", end="")
         ticker = yf.Ticker(symbol.upper())
         data = ticker.history(period="2d")
             
@@ -47,12 +51,12 @@ def quote(symbol:str):
             return r
 
         # Extract current price
-        print("Extracting current price... ", end="")
+        printnr("Extracting current price... ", end="")
         current_price:float = data["Close"].iloc[-1]
         print("done")
 
         # Extract previous close
-        print("Extracting previous close... ", end="")
+        printnr("Extracting previous close... ", end="")
         if len(data) < 2: # if our request for 2 days of data only returned 1 day of data, that means it is an IPO (rare). So there isn't a "previous close" to compare to. So in that case, just do the changes against the opening price.
             prev_close = data["Open"].iloc[-1]
         else: # there was data for a day before yesterday... not an IPO. most common obviously.
