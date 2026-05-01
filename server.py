@@ -50,18 +50,19 @@ def quote(symbol:str):
         # loop through each to extract data, construct body to return
         ToReturn:dict = {}
         for symb in symbols:
+            print("Extracting '" + symb.upper() + "'")
             ThisSymbData = data[symb.upper()]
             if ThisSymbData.isna().all().all(): # if it is all NaN data (not valid symbol probably)
                 pass
             else:
 
                 # Extract current price
-                printnr("Extracting current price... ")
+                printnr("\tExtracting current price... ")
                 current_price:float = ThisSymbData["Close"].iloc[-1]
                 print("done")
 
                 # Extract previous close
-                printnr("Extracting previous close... ")
+                printnr("\tExtracting previous close... ")
                 if len(ThisSymbData) < 2: # if our request for 2 days of data only returned 1 day of data, that means it is an IPO (rare). So there isn't a "previous close" to compare to. So in that case, just do the changes against the opening price.
                     prev_close = ThisSymbData["Open"].iloc[-1]
                 else: # there was data for a day before yesterday... not an IPO. most common obviously.
@@ -69,8 +70,10 @@ def quote(symbol:str):
                 print("done")
 
                 # Calculate
+                printnr("\tCalculating... ")
                 dollar_change:float = current_price - prev_close
                 percent_change:float = dollar_change / prev_close
+                print("done")
 
                 # Construct
                 # Percent change is sent already pre-multiplied by 100
